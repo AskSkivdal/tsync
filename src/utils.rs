@@ -94,7 +94,13 @@ fn check_token(token: proc_macro2::TokenTree, arg: &str) -> Option<String> {
                     // returns true.
                     .map_while(check_expression_is_path)
                     // Check if any yielded paths equal `arg`
-                    .any(|expr_path| expr_path.path.segments[0].ident.to_string().eq(arg))
+                    .any(|expr_path| {
+                        if let Some(last) = expr_path.path.segments.last() {
+                            last.ident.to_string().eq(arg)
+                        } else {
+                            false
+                        }
+                    })
                     // If so, return `Some(arg)`, otherwise `None`.
                     .then_some(arg.to_owned())
             })
