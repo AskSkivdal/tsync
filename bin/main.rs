@@ -51,10 +51,36 @@ struct Args {
         required = true
     )]
     output: PathBuf,
+
+    /// Output to stdout.
+    #[clap(short, long, help = "Output to stdout, not file", required = false)]
+    stdout: bool,
 }
 
 fn main() {
     let args: Args = Args::parse();
 
-    tsync::generate_typescript_defs(args.input, args.output, args.debug, args.enable_const_enums);
+    let uses_type_interface = args
+        .output
+        .to_str()
+        .map(|x| x.ends_with(".d.ts"))
+        .unwrap_or(true);
+
+    if args.stdout {
+        let content = tsync::generate_typescript_defs_inner(
+            args.input,
+            uses_type_interface,
+            args.debug,
+            args.enable_const_enums,
+        );
+
+        println!("{}", content.types)
+    } else {
+        tsync::generate_typescript_defs(
+            args.input,
+            args.output,
+            args.debug,
+            args.enable_const_enums,
+        );
+    }
 }
