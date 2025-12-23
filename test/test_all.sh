@@ -17,6 +17,7 @@ cd $SCRIPT_DIR
 ./issue-42-serde-rename/tsync.sh
 ./issue-43/tsync.sh
 ./issue-55/tsync.sh
+./issue-56/tsync.sh
 ./issue-58/tsync.sh
 ./issue-60/tsync.sh
 ./issue-63/tsync.sh
